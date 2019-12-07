@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <script type="text/javascript" src="./js/canvas.js"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="./css/canvas.css">
+  <link rel="stylesheet" type="text/css" media="all" href="./css/bootstrap-4.1.3-dist/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" media="all" href="./css/style.css">
+  <script type="text/javascript" src="./js/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="./js/bootstrap-4.1.3-dist/bootstrap.min.js"></script>
+</head>
+<body>
+	<div id="sidebar" class="list-group bg-dark text-light fixed-top" style="height:100%;width:200px;">
+        <div id="sidebar_title" class="px-2 py-3">
+            <font size="5" face="Comic Sans MS,Monotype Corsiva,HG行書体">Training</font>
+        </div>
+        <div class="list-group-item btn bg-dark text-left">
+            <a href="/" class="text-light">トップ</a>
+        </div>
+        <div class="list-group-item btn bg-dark text-left" data-toggle="collapse" href="#sidetList2" aria-expanded="false" aria-controls="sidetList2">
+            bootstrap4　▼
+        </div>
+        <div class="collapse pl-3" id="sidetList2">
+            <div class="list-group text-light">
+                <div class="list-group-item bg-secondary">
+                    <a href="/list1-1" class="text-light">参考リンク一覧</a><br>
+                    <a href="#" class="text-light">リスト1-2</a><br>
+                    <a href="#" class="text-light">リスト1-3</a><br>
+                </div>
+            </div>
+        </div>
+        <div class="list-group-item btn bg-dark text-left" data-toggle="collapse" href="#sidetList3" aria-expanded="false" aria-controls="sidetList3">
+            いろいろ　▼
+        </div>
+        <div class="collapse pl-3" id="sidetList3">
+            <div class="list-group text-light">
+                <div class="list-group-item bg-secondary">
+                    <a href="/create_icon" class="text-light">アイコン作成</a><br>
+                    <a href="#" class="text-light">リスト1-2</a><br>
+                    <a href="#" class="text-light">リスト1-3</a><br>
+                </div>
+                <button type="submit">Logout</button>
+            </div>
+        </div>
+    </div>
+	
+    <nav class="navbar navbar-expand-md navbar-light bg-light border">
+		<span class="navbar-brand">トップ</span>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<div class="navbar-nav">
+				<a class="nav-item nav-link active" href="#">ホーム <span class="sr-only">(現位置)</span></a>
+				<a class="nav-item nav-link" href="#">リンク1</a>
+				<a class="nav-item nav-link" href="#">リンク2</a>
+				<a class="nav-link disabled" href="#">無効</a>
+			</div>
+		</div>
+	</nav>
+    
+	<div class="m-3">
+		<h1>ペイント</h1>
+
+
+
+		<div class="form-group">
+			<label>横<input id="canvas-width" type="number" min="10" max="1000" value="200"></label>
+			<label>縦<input id="canvas-height" type="number" min="10" max="1000" value="200"></label>
+			<button onclick="changeCanvasSize()">サイズ変更</button>
+		</div>
+
+		<div id="drawtool-area" class="d-flex">
+			<div class="form-group" style="display:inline;" >
+				<div id="drawtool-list" class="radio" onclick="changeDrawTool()">
+					<label><input type="radio" name="drawtool" value="0" checked />
+						<img src="./img/pencil.png" class="btn p-0 radio_image" alt="ペン"></label>
+					<label><input type="radio" name="drawtool" value="1" />
+						<img src="./img/eraser2.png" class="btn p-0 radio_image" alt="消しゴム"></label>
+					<label><input type="radio" name="drawtool" value="4" />
+						<img src="./img/bucket.png" class="btn p-0 radio_image" alt="バケツ"></label>
+					<label><input type="checkbox" id="drawtool-figure" class="btn p-0 radio_image" />
+						<img src="./img/image.png" class="btn p-0 radio_image" alt="図形"></label>
+				</div>
+			</div>
+
+			<div class="form-group" id="drawtool-figure-list" style="height:40px;width:300px;overflow: auto;border: 1px solid;">
+				<div class="radio" onclick="changeDrawTool()">
+					<label><input type="radio" name="drawtool" value="11" />
+						<img src="./img/line.png" class="btn p-0 radio_image" alt="線"></label>
+					<label><input type="radio" name="drawtool" value="12" />
+						<img src="./img/square.png" class="btn p-0 radio_image" alt="四角"></label>
+					<label><input type="radio" name="drawtool" value="13" />
+						<img src="./img/circle.png" class="btn p-0 radio_image" alt="丸"></label>
+					<label><input type="radio" name="drawtool" value="14" />
+						<img src="./img/arrow-v.png" class="btn p-0 radio_image" alt="矢印[縦]"></label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="formControlRange">太さ</label>
+			<input type="range" id="lineWidth" min="1" max="100" step="1" value="5" style="width:100px;">
+		</div>
+
+		<input id="color-dialog" type="color">
+		<br>
+		<input type="button" value="<" onclick="undo()" />
+		<input type="button" value=">" onclick="redo()" />
+
+		<div id="canvas-area" style="width:700px;height:500px;" class="canvas-wrapper">
+			<canvas id="main-canvas">HTML5 Canvasに対応したブラウザを使用してください。</canvas>
+			<canvas id="canvas-view"></canvas>
+
+		</div>
+		<p>x=<span id="x_mouse"></span> / y=<span id="y_mouse"></span></p>
+		<button id="download" class="btn btn-primary" onclick="download()">ダウンロード</button>
+		<br><br>
+		<button onclick="testbtn()">テストボタン</button>
+		<p>テストテキスト1=<span id="test1"></span></p>
+		<p>テストテキスト2=<span id="test2"></span></p>
+	</div>
+</body>
+</html>
